@@ -1,0 +1,4 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/home/elliot/Documents/code/gocheive_lift/src/main/resources/props,/home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/props)[0m
+[0m[[0mdebug[0m] [0m	(/home/elliot/Documents/code/gocheive_lift/src/main/resources/props/default.props,/home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/props/default.props)[0m
+[0m[[0mdebug[0m] [0m	(/home/elliot/Documents/code/gocheive_lift/src/main/resources/props/default.logback.xml,/home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/props/default.logback.xml)[0m

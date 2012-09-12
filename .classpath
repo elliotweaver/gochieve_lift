@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="code/" kind="src" path="src/main/scala"/>
+	<classpathentry kind="src" path="src/main/scala/code"/>
+	<classpathentry excluding="code/" kind="src" path="src/test/scala"/>
+	<classpathentry kind="src" path="src/test/scala/code"/>
+	<classpathentry kind="lib" path="sbt-launch-0.12.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="target/scala-2.9.1/classes"/>
+</classpath>
