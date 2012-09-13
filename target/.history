@@ -283,3 +283,4 @@ container:stop
 container:start
 container:stop
 container:start
+exit

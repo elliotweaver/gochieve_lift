@@ -22,6 +22,7 @@ libraryDependencies ++= {
     "net.liftweb"             %% "lift-mongodb-record" % liftVersion                  % "compile",
     "net.liftmodules"         %% "omniauth"            % "2.4-0.5",
     "net.liftmodules"         %% "lift-jquery-module"  % (liftVersion + "-1.0"),
+    "com.restfb"              %  "restfb"               % "1.6.11",
     "com.foursquare"          %% "rogue"               % "1.1.6"                      % "compile->default" intransitive(),
     "org.eclipse.jetty"       %  "jetty-webapp"        % "8.1.7.v20120910"            % "container",
     "org.eclipse.jetty.orbit" %  "javax.servlet"       % "3.0.0.v201112011016"        % "container" artifacts Artifact("javax.servlet", "jar", "jar"),
