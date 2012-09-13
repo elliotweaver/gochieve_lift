@@ -2,19 +2,19 @@
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
-[0m[[0mdebug[0m] [0m	modified: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/bootstrap/liftweb/Boot.scala)[0m
-[0m[[0mdebug[0m] [0mRemoved products: Set(/home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/bootstrap/liftweb/Boot.class, /home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/bootstrap/liftweb/Boot$$anonfun$boot$4.class, /home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/bootstrap/liftweb/Boot$$anonfun$boot$5.class, /home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/bootstrap/liftweb/Boot$$anonfun$boot$3.class, /home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/bootstrap/liftweb/Boot$$anonfun$boot$1.class, /home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes/bootstrap/liftweb/Boot$$anonfun$boot$2.class)[0m
+[0m[[0mdebug[0m] [0m	modified: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/code/view/Auth.scala)[0m
+[0m[[0mdebug[0m] [0mRemoved products: Set()[0m
 [0m[[0mdebug[0m] [0mModified external sources: Set()[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
-[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/bootstrap/liftweb/Boot.scala)[0m
+[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/code/view/Auth.scala)[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mSources indirectly invalidated by:[0m
-[0m[[0mdebug[0m] [0m	product: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/bootstrap/liftweb/Boot.scala)[0m
+[0m[[0mdebug[0m] [0m	product: Set()[0m
 [0m[[0mdebug[0m] [0m	binary dep: Set()[0m
 [0m[[0mdebug[0m] [0m	external source: Set()[0m
-[0m[[0mdebug[0m] [0mInitially invalidated: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/bootstrap/liftweb/Boot.scala)[0m
+[0m[[0mdebug[0m] [0mInitially invalidated: Set(/home/elliot/Documents/code/gocheive_lift/src/main/scala/code/view/Auth.scala)[0m
 [0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes...[0m
-[0m[[0mdebug[0m] [0mRunning cached compiler 4d9fe3, interfacing (CompilerInterface) with Scala compiler version 2.9.1.final[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 419f16a7, interfacing (CompilerInterface) with Scala compiler version 2.9.1.final[0m
 [0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
 [0m[[0mdebug[0m] [0m	-deprecation[0m
 [0m[[0mdebug[0m] [0m	-unchecked[0m
@@ -24,9 +24,6 @@
 [0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/netx.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/plugin.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/rhino.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/modules/jdk.boot.jar:/usr/lib/jvm/java-6-openjdk-amd64/jre/classes:/home/elliot/.sbt/boot/scala-2.9.1/lib/scala-library.jar[0m
 [0m[[0mdebug[0m] [0m	-classpath[0m
 [0m[[0mdebug[0m] [0m	/home/elliot/Documents/code/gocheive_lift/target/scala-2.9.1/classes:/home/elliot/.ivy2/cache/net.liftweb/lift-webkit_2.9.1/jars/lift-webkit_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-util_2.9.1/jars/lift-util_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-actor_2.9.1/jars/lift-actor_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-common_2.9.1/jars/lift-common_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-json_2.9.1/jars/lift-json_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/org.scala-lang/scalap/jars/scalap-2.9.1.jar:/home/elliot/.sbt/boot/scala-2.9.1/lib/scala-compiler.jar:/home/elliot/.ivy2/cache/com.thoughtworks.paranamer/paranamer/jars/paranamer-2.4.1.jar:/home/elliot/.ivy2/cache/joda-time/joda-time/jars/joda-time-1.6.2.jar:/home/elliot/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.6.jar:/home/elliot/.ivy2/cache/javax.mail/mail/jars/mail-1.4.4.jar:/home/elliot/.ivy2/cache/javax.activation/activation/jars/activation-1.1.jar:/home/elliot/.ivy2/cache/nu.validator.htmlparser/htmlparser/bundles/htmlparser-1.4.jar:/home/elliot/.ivy2/cache/commons-fileupload/commons-fileupload/jars/commons-fileupload-1.2.2.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-mongodb-record_2.9.1/jars/lift-mongodb-record_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-record_2.9.1/jars/lift-record_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-proto_2.9.1/jars/lift-proto_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-mongodb_2.9.1/jars/lift-mongodb_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-json-ext_2.9.1/jars/lift-json-ext_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/org.mongodb/mongo-java-driver/jars/mongo-java-driver-2.7.3.jar:/home/elliot/.ivy2/cache/net.liftmodules/omniauth_2.9.1/jars/omniauth_2.9.1-2.4-0.5.jar:/home/elliot/.ivy2/cache/net.databinder/dispatch-core_2.9.1/jars/dispatch-core_2.9.1-0.8.5.jar:/home/elliot/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.1.jar:/home/elliot/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.1.jar:/home/elliot/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar:/home/elliot/.ivy2/cache/net.databinder/dispatch-http_2.9.1/jars/dispatch-http_2.9.1-0.8.5.jar:/home/elliot/.ivy2/cache/net.databinder/dispatch-futures_2.9.1/jars/dispatch-futures_2.9.1-0.8.5.jar:/home/elliot/.ivy2/cache/net.databinder/dispatch-oauth_2.9.1/jars/dispatch-oauth_2.9.1-0.8.5.jar:/home/elliot/.ivy2/cache/net.databinder/dispatch-http-json_2.9.1/jars/dispatch-http-json_2.9.1-0.8.5.jar:/home/elliot/.ivy2/cache/net.databinder/dispatch-json_2.9.1/jars/dispatch-json_2.9.1-0.8.5.jar:/home/elliot/.ivy2/cache/net.liftmodules/lift-jquery-module_2.9.1/jars/lift-jquery-module_2.9.1-2.5-M1-1.0.jar:/home/elliot/.ivy2/cache/net.liftweb/lift-testkit_2.9.1/jars/lift-testkit_2.9.1-2.5-M1.jar:/home/elliot/.ivy2/cache/commons-httpclient/commons-httpclient/jars/commons-httpclient-3.1.jar:/home/elliot/.ivy2/cache/com.foursquare/rogue_2.9.1/jars/rogue_2.9.1-1.1.6.jar:/home/elliot/.ivy2/cache/ch.qos.logback/logback-classic/jars/logback-classic-1.0.6.jar:/home/elliot/.ivy2/cache/ch.qos.logback/logback-core/jars/logback-core-1.0.6.jar:/home/elliot/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.6.5.jar[0m
-[0m[[31merror[0m] [0m/home/elliot/Documents/code/gocheive_lift/src/main/scala/bootstrap/liftweb/Boot.scala:60: not found: value Omniauth[0m
-[0m[[31merror[0m] [0m	Omniauth.initWithProviders(List(new FacebookProvider("279073072192775", "52b1db374376abca115dd031cc2adcab")))[0m
-[0m[[31merror[0m] [0m	^[0m
-[0m[[31merror[0m] [0mone error found[0m
-[0m[[0mdebug[0m] [0mCompilation failed (CompilerInterface)[0m
-[0m[[31merror[0m] [0m(compile:[31mcompile[0m) Compilation failed[0m
+[0m[[0mdebug[0m] [0mScala compilation took 1.126753819 s[0m
+[0m[[0mdebug[0m] [0m	Invalidated direct: Set()[0m
+[0m[[0mdebug[0m] [0mIncrementally invalidated: Set()[0m

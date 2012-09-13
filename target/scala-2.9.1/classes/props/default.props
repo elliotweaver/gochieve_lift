@@ -1,1 +1,6 @@
-omniauth.baseurl=http://localhost:8080
+omniauth.baseurl=http://localhost:8080/
+omniauth.facebooksecret=52b1db374376abca115dd031cc2adcab
+omniauth.facebookkey=279073072192775
+omniauth.facebookpermissions=email,read_stream
+omniauth.successurl=/auth/success
+omniauth.failureurl=/auth/failure

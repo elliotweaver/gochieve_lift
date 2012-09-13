@@ -13,7 +13,6 @@ import net.liftweb.http.js.jquery._
 
 import code.db.{MongoConfig}
 import code.model.{User}
-import code.lib.{FacebookProviderCustom}
 
 //import omniauth.lib.{TwitterProvider, FacebookProvider}
 import omniauth.lib._
@@ -31,14 +30,10 @@ class Boot extends Loggable {
 
     // Build SiteMap
     val entries = List(
-      Menu.i("Home") / "index" // the simple way to declare a menu
+      Menu.i("Home") / "index",
+      Menu.i("Facebook Success") / "auth" / "success" >> Hidden,
+      Menu.i("Facebook Failure") / "auth" / "failure" >> Hidden
     ) ::: Omniauth.sitemap ::: User.sitemap
-    
-    //println(Omniauth.sitemap)
-    //println(entries)
-    
-	//Set sitemap
-    //LiftRules.setSiteMapFunc(() => User.sitemapMutator(SiteMap(entries:_*)))
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
@@ -67,7 +62,7 @@ class Boot extends Loggable {
     MongoConfig.init
       
     //Omni Facebook init
-	Omniauth.initWithProviders(List(new FacebookProvider("279073072192775", "52b1db374376abca115dd031cc2adcab")))
+	Omniauth.init
 	
 	// What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)

@@ -38,5 +38,18 @@ object User extends User with MongoMetaRecord[User] with MetaMegaProtoUser[User]
 * An O-R mapped "User" class that includes first name, last name, password and we add a "Personal Essay" to it
 */
 class User private() extends MongoRecord[User] with MegaProtoUser[User] {
-	def meta = User // what's the "meta" server
+	def meta = User
+	
+	lazy val fbid = new FacebookIdField(meta)
+	
+	protected class FacebookIdField(obj: User) extends StringField(this, 12)
+	
+	protected def findUserByFbId(fbId: String): Box[User] = {
+    var search = User.findAll("fbid", fbId).headOption
+    search match {
+      case Some(x) => Full(x)
+      case None => return Empty
+    }
+  }
+	
 }
