@@ -34,6 +34,8 @@ class Boot extends Loggable {
       Menu.i("Facebook Success") / "auth" / "success" >> Hidden,
       Menu.i("Facebook Failure") / "auth" / "failure" >> Hidden
     ) ::: Omniauth.sitemap ::: User.sitemap
+    
+    println(User)
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
@@ -62,9 +64,9 @@ class Boot extends Loggable {
     MongoConfig.init
       
     //Omni Facebook init
-	Omniauth.init
+	  Omniauth.init
 	
-	// What is the function to test if a user is logged in?
+	  // What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
   }

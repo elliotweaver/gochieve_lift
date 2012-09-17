@@ -8,17 +8,16 @@ import net.liftweb.common._
 import net.liftweb.http._
 import code.model._
 
+import net.liftweb.json._
+import net.liftweb.json.JsonParser._
+
+import com.restfb._
+
 class Auth extends LiftView with Loggable {
 
   override def dispatch = {
     case "success" => doSuccess _
     case "failure" => doFailure _
-  }
-  
-  def createNewUser(auth: AuthInfo): Boolean = {
-    println("createNewUser")
-    //User.createRecord
-    true
   }
   
   def loginUser(record: User): Boolean = {
@@ -27,10 +26,10 @@ class Auth extends LiftView with Loggable {
   }
   
   def processUser(auth: AuthInfo): Boolean = {
-    val search = User.findAll("fbid", auth.uid).headOption
+    val search = User.findUserByFbId(auth.uid)
     search match {
-      case Some(record) => loginUser(record)
-      case None => createNewUser(auth)
+      case Full(record) => loginUser(record)
+      case _ => User.createNewUser(auth)
     }
   }
 
