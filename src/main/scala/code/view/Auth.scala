@@ -7,10 +7,8 @@ import xml.{ Text, NodeSeq }
 import net.liftweb.common._
 import net.liftweb.http._
 import code.model._
-
 import net.liftweb.json._
 import net.liftweb.json.JsonParser._
-
 import com.restfb._
 
 class Auth extends LiftView with Loggable {
@@ -19,23 +17,10 @@ class Auth extends LiftView with Loggable {
     case "success" => doSuccess _
     case "failure" => doFailure _
   }
-  
-  def loginUser(record: User): Boolean = {
-    println("loginUser")
-    true
-  }
-  
-  def processUser(auth: AuthInfo): Boolean = {
-    val search = User.findUserByFbId(auth.uid)
-    search match {
-      case Full(record) => loginUser(record)
-      case _ => User.createNewUser(auth)
-    }
-  }
 
   def doSuccess: NodeSeq = {
     val success = Omniauth.currentAuth match {
-      case Full(omni) => processUser(omni)
+      case Full(omni) => User.processUser(omni)
       case Empty => doFailure
       case Failure(_,_,_) => doFailure
     }

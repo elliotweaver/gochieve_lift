@@ -20,7 +20,8 @@ libraryDependencies ++= {
   Seq(
     "net.liftweb"             %% "lift-webkit"         % liftVersion                  % "compile",
     "net.liftweb"             %% "lift-mongodb-record" % liftVersion                  % "compile",
-    "net.liftweb"             %  "lift-couchdb"        % "2.0",
+    "net.liftweb"             %% "lift-widgets"        % "2.4",
+    "net.liftweb"             %% "lift-wizard"         % liftVersion,
     "net.liftmodules"         %% "omniauth"            % "2.4-0.5",
     "net.liftmodules"         %% "lift-jquery-module"  % (liftVersion + "-1.0"),
     "net.liftweb"             %% "lift-json"           % "XXX",

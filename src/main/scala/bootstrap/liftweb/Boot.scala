@@ -3,20 +3,23 @@ package bootstrap.liftweb
 import net.liftweb._
 import util._
 import Helpers._
-
 import common._
 import http._
 import sitemap._
 import Loc._
 import net.liftmodules.JQueryModule
 import net.liftweb.http.js.jquery._
-
 import code.db.{MongoConfig}
-import code.model.{User}
-
-//import omniauth.lib.{TwitterProvider, FacebookProvider}
+import code.model._
 import omniauth.lib._
-import omniauth.Omniauth;
+import omniauth.Omniauth
+import net.liftweb.widgets.autocomplete.AutoComplete
+
+object MenuGroups {
+  val SettingsGroup = LocGroup("settings")
+  val AdminGroup = LocGroup("admin")
+  val TopBarGroup = LocGroup("topbar")
+}
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -33,9 +36,7 @@ class Boot extends Loggable {
       Menu.i("Home") / "index",
       Menu.i("Facebook Success") / "auth" / "success" >> Hidden,
       Menu.i("Facebook Failure") / "auth" / "failure" >> Hidden
-    ) ::: Omniauth.sitemap ::: User.sitemap
-    
-    println(User)
+    ) ::: Omniauth.sitemap ::: User.sitemap ::: Achievement.menus ::: File.menus ::: FieldOption.menus
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
@@ -65,6 +66,8 @@ class Boot extends Loggable {
       
     //Omni Facebook init
 	  Omniauth.init
+	  
+	  AutoComplete.init
 	
 	  // What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)

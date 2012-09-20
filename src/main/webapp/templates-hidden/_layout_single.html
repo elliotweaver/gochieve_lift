@@ -6,15 +6,26 @@
     <meta content="" name="keywords"></meta>
     <title></title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"></link>
+    <link href="/stylesheets/bootstrap.min.css" type="text/css" rel="stylesheet" ></link>
     <link href="/stylesheets/style.css" type="text/css" rel="stylesheet" ></link>
     <script id="jquery" src="/scripts/jquery-1.7.1.js" type="text/javascript"></script>
-    <script id="jquery" src="/scripts/jquery.colorbox-min.js" type="text/javascript"></script>
     <script id="jquery" src="/scripts/common.js" type="text/javascript"></script>
   </head>
   <body>
     
     <div class="lift:embed?what=templates-hidden/_header">Header</div>
-    <lift:bind name="content"></lift:bind>
+    
+    <div class="layout layout-single">
+      <div class="wrapper">
+        <div class="inside">
+          
+          <lift:bind name="content"></lift:bind>
+          
+        </div>
+      </div>
+    </div>
+    
+    
     <div class="lift:embed?what=templates-hidden/_footer">Footer</div>
     
   </body>

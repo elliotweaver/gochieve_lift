@@ -1,0 +1,121 @@
+body {
+    background-color: #7B7B3B;
+}
+p {}
+a {}
+a:hover {}
+ul {}
+li {}
+
+.wrapper {
+	  margin: 0 auto;
+    width: 1008px;
+}
+.inner {}
+.inside {
+	  padding: 0 20px;
+}
+.in {}
+
+.header {
+	  background-color: #1B1B1B;
+    background-image: -moz-linear-gradient(center top , #222222, #111111);
+    background-repeat: repeat-x;
+    border-color: #252525;
+    padding-top: 9px;
+}
+.header .wrapper {}
+.header .inside {}
+.header .logo {}
+.header .logo a {
+	  display: block;
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 0 10px 0;
+}
+.header .search {
+	  float: left;
+    padding: 5px;
+    margin-left: 50px;
+}
+.header .search input {}
+.header .nav {
+	  float: left;
+    margin-left: 10px;
+    padding: 5px;
+    margin-top: 9px;
+    margin-bottom: 0px;
+}
+.header .nav ul {
+	  margin: 0;
+}
+.header .nav ul li {
+	  float: left;
+    list-style-type: none;
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right: 1px solid #888888;
+    line-height: 13px;
+}
+.header .nav ul li.last {
+	  border-right: medium none;
+	  margin-right: 0;
+	  padding-right: 0;
+}
+.header .nav ul li a {}
+.header .nav ul li a:hover {}
+.header .access {
+	  float: right;
+    padding: 11px 0 11px 0;
+}
+.header .access a {}
+
+.footer {
+    padding: 10px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 12px;
+}
+.footer a {}
+
+.layout {
+	  background: none repeat scroll 0 0 #F7F7F7;
+}
+.layout .wrapper {
+    margin: 20px auto;margin: 0 auto;
+    padding: 20px 0;
+}
+.layout .inside {}
+.layout-stacked {}
+.layout-stacked .top {}
+.layout-stacked .center {}
+.layout-stacked .left {
+	  width: 49.99%;
+    float: left;
+}
+.layout-stacked .left .in {
+	  margin-right: 20px;
+}
+.layout-stacked .right {
+	  width: 49.99%;
+    float: left;
+}
+
+
+.right .access a {
+    background: none repeat scroll 0 0 #005580;
+    border: 1px solid #005580;
+    border-radius: 10px 10px 10px 10px;
+    font-size: 20px;
+    margin: 20px auto;
+    padding: 15px;
+    text-align: center;
+    width: 180px;
+    display: block;
+    color: #FFFFFF;
+    line-height: 25px;
+}
+.right .video {
+	margin: 30px 0;
+}

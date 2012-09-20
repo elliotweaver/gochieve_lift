@@ -1,6 +1,5 @@
 package code.model
 
-//import net.liftweb.record._
 import net.liftweb.record.field._
 import net.liftweb.mongodb._
 import net.liftweb.mongodb.record._
@@ -9,9 +8,8 @@ import net.liftweb.util._
 import net.liftweb.common._
 import net.liftweb.sitemap._
 import code.lib._
-
+import omniauth.AuthInfo
 import net.liftweb.json._
-
 import com.restfb._
 
 /**
@@ -39,13 +37,17 @@ object User extends User with MongoMetaRecord[User] with MetaMegaProtoUser[User]
 }
 
 /**
-* An O-R mapped "User" class that includes first name, last name, password and we add a "Personal Essay" to it
+* An O-R mapped "User" class
 */
 class User private() extends MongoRecord[User] with MegaProtoUser[User] {
 	def meta = User
 	
 	lazy val fbid = new FacebookIdField(meta)
 	protected class FacebookIdField(obj: User) extends StringField(this, 12)
+	
+	object created extends DateTimeField(this)
+  object updated extends DateTimeField(this)
+  object author_updated extends StringField(this, 200)
 	
 	def findUserByFbId(fbId: String): Box[User] = {
     var search = meta.findAll("fbid", fbId).headOption
@@ -54,6 +56,8 @@ class User private() extends MongoRecord[User] with MegaProtoUser[User] {
       case None => return Empty
     }
   }
+	
+	//object fbClient extends SessionVar[Box[FacebookClient]](Empty)
 	
 	var fbClient: FacebookClient = new DefaultFacebookClient("")
 	
@@ -74,10 +78,32 @@ class User private() extends MongoRecord[User] with MegaProtoUser[User] {
 	}
 	
 	def createNewUser(auth: AuthInfo): Boolean = {
-    println("createNewUser")
     User.getFb(auth.token)
-    
+    User.createRecord
+            .email(User.fbProfile.email)
+            //.timezone(User.fbProfile.timezone)
+            .validated(User.fbProfile.verified)
+            .locale(User.fbProfile.locale)
+            .lastName(User.fbProfile.last_name)
+            .firstName(User.fbProfile.first_name)
+            .superUser(false)
+            .fbid(User.fbProfile.id)
+            .save
+    User.logUserIn(User)
     true
+  }
+	
+	def loginUser(record: User): Boolean = {
+	  User.logUserIdIn(record.id.toString)
+    true
+  }
+	
+	def processUser(auth: AuthInfo): Boolean = {
+    val search = User.findUserByFbId(auth.uid)
+    search match {
+      case Full(record) => loginUser(record)
+      case _ => createNewUser(auth)
+    }
   }
 	
 }
