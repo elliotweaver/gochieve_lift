@@ -98,10 +98,50 @@ class Achievement private() extends MongoRecord[Achievement] with ObjectIdPk[Ach
   object is_private extends BooleanField(this) {
     override def displayName = "Is Private?"
   }
+  object likes extends IntField(this, 0) {
+    override def displayName = "Likes"
+  }
+  object gochieves extends IntField(this, 0) {
+    override def displayName = "Gochieves"
+  }
+  object bucketlists extends IntField(this, 0) {
+    override def displayName = "Bucketlists"
+  }
   object created extends DateTimeField(this)
   object updated extends DateTimeField(this)
   object author_created extends StringField(this, 200)
   object author_updated extends StringField(this, 200)
+  
+  def getSetting = {
+    setting.value match {
+      case "1" => "Public"
+      case "2" => "Invite Only"
+      case "3" => "Limited #"
+      case _ => "There is no value which is odd"
+    }
+  }
+  
+  def getMethod = {
+    method.value match {
+      case "1" => "Honor System"
+      case "2" => "Photo Submission"
+      case "3" => "Video Submission"
+      case "4" => "Check-In"
+      case "5" => "Creator Approval"
+      case _ => "There is no value which is odd"
+    }
+  }
+  
+  def getCategory = {
+    category.value match {
+      case "1" => "Auto's and Vehicles"
+      case "2" => "Comedy"
+      case "3" => "Education"
+      case "4" => "Entertainment"
+      case "5" => "Fashion"
+      case _ => "There is no value which is odd"
+    }
+  }
   
   /*
   object SettingTypes extends Enumeration {

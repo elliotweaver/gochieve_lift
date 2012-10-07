@@ -12,6 +12,7 @@ import code.lib._
 import omniauth.AuthInfo
 import net.liftweb.json._
 import com.restfb._
+import org.bson.types.ObjectId
 
 /**
 * The singleton that has methods for accessing the database
@@ -59,6 +60,14 @@ class User private() extends MongoRecord[User] with MegaProtoUser[User] {
 	
 	def findUserByFbId(fbId: String): Box[User] = {
     var search = meta.findAll("fbid", fbId).headOption
+    search match {
+      case Some(x) => Full(x)
+      case None => return Empty
+    }
+  }
+	
+	def findUserById(id: String): Box[User] = {
+    var search = meta.find("_id", new ObjectId(id)).headOption
     search match {
       case Some(x) => Full(x)
       case None => return Empty

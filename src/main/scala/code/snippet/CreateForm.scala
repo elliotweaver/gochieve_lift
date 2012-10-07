@@ -80,7 +80,7 @@ object CreateForm {
             .author_created("AuthorCreated")
             .author_updated("AuthorUpdated")
             .save
-        RedirectTo("/share/"+record.id)
+        RedirectTo("/gc?"+record.id)
       }
       
       else {

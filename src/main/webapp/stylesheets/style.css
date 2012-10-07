@@ -129,3 +129,48 @@ li {}
     font-size: 15px;
     line-height: 30px;
 }
+
+.top {
+	  overflow: hidden;
+	  border-bottom: 1px solid #CCCCCC;
+}
+.top .side-1 {
+	  float: left;
+    width: 49.99%;
+}
+.top .side-2 {
+	  float: left;
+    width: 49.99%;
+}
+.top h1 {}
+.top .posted-by {}
+.top .gochieves {}
+.top .settings {}
+.middle {
+	  overflow: hidden;
+}
+.center {}
+.left {
+	  float: left;
+    width: 49.99%;
+}
+.right {
+	  float: left;
+    width: 49.99%;
+}
+.gc-top {
+	  border-bottom: 1px solid #CCCCCC;
+}
+.gc-info {
+	  border-bottom: 1px solid #CCCCCC;
+}
+.gc-details {
+	  border-bottom: 1px solid #CCCCCC;
+}
+.gc-related {}
+.gc-invite {
+	  border-bottom: 1px solid #CCCCCC;
+}
+.gc-interact {
+	  border-bottom: 1px solid #CCCCCC;
+}
