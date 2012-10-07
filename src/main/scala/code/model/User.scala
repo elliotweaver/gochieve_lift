@@ -4,6 +4,7 @@ import net.liftweb.record.field._
 import net.liftweb.mongodb._
 import net.liftweb.mongodb.record._
 import net.liftweb.mongodb.record.field._
+import net.liftweb.http.{SessionVar}
 import net.liftweb.util._
 import net.liftweb.common._
 import net.liftweb.sitemap._
@@ -42,12 +43,19 @@ object User extends User with MongoMetaRecord[User] with MetaMegaProtoUser[User]
 class User private() extends MongoRecord[User] with MegaProtoUser[User] {
 	def meta = User
 	
-	lazy val fbid = new FacebookIdField(meta)
-	protected class FacebookIdField(obj: User) extends StringField(this, 12)
-	
+	object fbid extends StringField(this, 100)
+	object fbtoken extends StringField(this, 100)
 	object created extends DateTimeField(this)
   object updated extends DateTimeField(this)
   object author_updated extends StringField(this, 200)
+	
+	private object fbClient extends SessionVar[Box[FacebookClient]](Empty)
+	def facebookClient: Box[FacebookClient] = fbClient.is
+  def setFacebookClient(fb: FacebookClient){ fbClient(Full(fb)) }
+	
+	private object fbProfile extends SessionVar[Box[FbProfile]](Empty)
+	def facebookProfile: Box[FbProfile] = fbProfile.is
+  def setFacebookProfile(fb: FbProfile){ fbProfile(Full(fb)) }
 	
 	def findUserByFbId(fbId: String): Box[User] = {
     var search = meta.findAll("fbid", fbId).headOption
@@ -57,50 +65,47 @@ class User private() extends MongoRecord[User] with MegaProtoUser[User] {
     }
   }
 	
-	//object fbClient extends SessionVar[Box[FacebookClient]](Empty)
-	
-	var fbClient: FacebookClient = new DefaultFacebookClient("")
-	
-	var fbProfile: FbProfile = new FbProfile
-	
 	def getFb(token: String): Unit = {
-	  User.getFbClient(token)
-    User.getFbData
+	  getFbClient(token)
+    getFbData
 	}
 	
-	def getFbClient(token: String): Unit = {
-	  User.fbClient = new DefaultFacebookClient(token)
-	}
+	def getFbClient(token: String): Unit = setFacebookClient(new DefaultFacebookClient(token))
 	
 	def getFbData: Unit = {
 	  implicit val formats = net.liftweb.json.DefaultFormats
-	  User.fbProfile = parse(User.fbClient.fetchObject("me", classOf[com.restfb.json.JsonObject]).toString).extract[FbProfile]
+	  facebookClient match {
+      case Full(client) => setFacebookProfile(parse(client.fetchObject("me", classOf[com.restfb.json.JsonObject]).toString).extract[FbProfile])
+      case Empty => Empty
+      case Failure(_,_,_) => Empty
+    }
 	}
 	
-	def createNewUser(auth: AuthInfo): Boolean = {
-    User.getFb(auth.token)
-    User.createRecord
-            .email(User.fbProfile.email)
-            //.timezone(User.fbProfile.timezone)
-            .validated(User.fbProfile.verified)
-            .locale(User.fbProfile.locale)
-            .lastName(User.fbProfile.last_name)
-            .firstName(User.fbProfile.first_name)
-            .superUser(false)
-            .fbid(User.fbProfile.id)
-            .save
-    User.logUserIn(User)
-    true
-  }
+	def createNewUser(auth: AuthInfo): Unit = facebookProfile match {
+      case Full(profile) => {
+        meta.createRecord
+          .email(profile.email)
+          //.timezone(User.fbProfile.timezone)
+          .validated(profile.verified)
+          .locale(profile.locale)
+          .lastName(profile.last_name)
+          .firstName(profile.first_name)
+          .superUser(false)
+          .fbid(profile.id)
+          .fbtoken(auth.token)
+          .save
+        meta.logUserIn(meta)
+        true
+      } 
+      case Empty => false
+      case Failure(_,_,_) => false
+    }
 	
-	def loginUser(record: User): Boolean = {
-	  User.logUserIdIn(record.id.toString)
-    true
-  }
+	def loginUser(record: User): Unit = meta.logUserIdIn(record.id.toString)
 	
-	def processUser(auth: AuthInfo): Boolean = {
-    val search = User.findUserByFbId(auth.uid)
-    search match {
+	def processUser(auth: AuthInfo): Unit = {
+    getFb(auth.token) 
+    meta.findUserByFbId(auth.uid) match {
       case Full(record) => loginUser(record)
       case _ => createNewUser(auth)
     }
@@ -108,11 +113,6 @@ class User private() extends MongoRecord[User] with MegaProtoUser[User] {
 	
 }
 
-/*
-{"hometown":{"id":"106277849402612","name":"Santa Cruz, California"},"link":"http://www.facebook.com/ewcalma","locale":"en_US",
-  "updated_time":"2012-08-06T19:16:39+0000","id":"6714993","first_name":"Elliot","username":"ewcalma","timezone":-4,
-  "email":"elliot@oxygenproductions.com","verified":true,"name":"Elliot Weaver","last_name":"Weaver","gender":"male"}
-*/
 case class Hometown(
     id:                 Option[String]   = None,
     name:               Option[String]   = None)
@@ -130,3 +130,10 @@ case class FbProfile(
     name:               Option[String]   = None,
     last_name:          Option[String]   = None, 
     gender:             Option[String]   = None)
+
+    
+/*
+{"hometown":{"id":"106277849402612","name":"Santa Cruz, California"},"link":"http://www.facebook.com/ewcalma","locale":"en_US",
+  "updated_time":"2012-08-06T19:16:39+0000","id":"6714993","first_name":"Elliot","username":"ewcalma","timezone":-4,
+  "email":"elliot@oxygenproductions.com","verified":true,"name":"Elliot Weaver","last_name":"Weaver","gender":"male"}
+*/

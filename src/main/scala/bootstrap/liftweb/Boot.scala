@@ -15,6 +15,8 @@ import omniauth.lib._
 import omniauth.Omniauth
 import net.liftweb.widgets.autocomplete.AutoComplete
 
+import code.snippet.{Share}
+
 object MenuGroups {
   val SettingsGroup = LocGroup("settings")
   val AdminGroup = LocGroup("admin")
@@ -35,7 +37,13 @@ class Boot extends Loggable {
     val entries = List(
       Menu.i("Home") / "index",
       Menu.i("Facebook Success") / "auth" / "success" >> Hidden,
-      Menu.i("Facebook Failure") / "auth" / "failure" >> Hidden
+      Menu.i("Facebook Failure") / "auth" / "failure" >> Hidden,
+      Menu.i("Create") / "create",
+      Menu.i("View") / "gc",
+      Menu.i("Share") / "share",
+      Menu.i("Profile") / "profile",
+      Menu.i("Account") / "account"
+      //Menu.i("Share GoChieve") / "share"
     ) ::: Omniauth.sitemap ::: User.sitemap ::: Achievement.menus ::: File.menus ::: FieldOption.menus
 
     // set the sitemap.  Note if you don't want access control for

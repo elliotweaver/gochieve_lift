@@ -25,14 +25,14 @@ class Auth extends LiftView with Loggable {
       case Failure(_,_,_) => doFailure
     }
     if (success == true) {
-      S.notice("Authentication Success");
+      S.notice("Authentication Success")
       S.redirectTo("/")  
     }
     doFailure
   }
 
   def doFailure: NodeSeq = {
-    S.notice("Authentication Failed");
+    S.notice("Authentication Failed")
     S.redirectTo("/")
   }
 

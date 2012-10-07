@@ -62,22 +62,22 @@ class Achievement private() extends MongoRecord[Achievement] with ObjectIdPk[Ach
   object description extends TextareaField(this, 12) {
     override def displayName = "Description"
   }
-  def tags = new AutoComplete {
+  object tags extends StringField(this, 200) {
     override def displayName = "Tags"
   }
   object image extends StringField(this, 200) {
     override def displayName = "Image"
   }
-  object setting extends EnumField(this, SettingTypes) {
+  object setting extends StringField(this, 200) {
     override def displayName = "Post Setting"
   }
-  object method extends EnumField(this, MethodTypes) {
+  object method extends StringField(this, 200) {
     override def displayName = "Accomplishment Method"
   }
   object location extends StringField(this, 200) {
     override def displayName = "Location"
   }
-  object category extends EnumField(this, CategoryTypes) {
+  object category extends StringField(this, 200) {
     override def displayName = "Category"
   }
   object deadline extends DateTimeField(this) {
@@ -103,6 +103,7 @@ class Achievement private() extends MongoRecord[Achievement] with ObjectIdPk[Ach
   object author_created extends StringField(this, 200)
   object author_updated extends StringField(this, 200)
   
+  /*
   object SettingTypes extends Enumeration {
     val Option1         = new Val("Option 1")
     val Option2         = new Val("Option 2")
@@ -117,5 +118,6 @@ class Achievement private() extends MongoRecord[Achievement] with ObjectIdPk[Ach
     val Option1         = new Val("Option 1")
     val Option2         = new Val("Option 2")
   }
+  */
   
 }
