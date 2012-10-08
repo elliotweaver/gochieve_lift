@@ -8,9 +8,8 @@ import net.liftweb.util._
 import net.liftweb.common._
 import net.liftweb.sitemap._
 import net.liftweb.json._
-import com.restfb._
 import xml.{Text, NodeSeq}
-import net.liftweb.mongodb.BsonDSL._
+import com.foursquare.rogue.Rogue._
 
 object Action extends Action with MongoMetaRecord[Action] {
   
@@ -37,6 +36,10 @@ class Action extends MongoRecord[Action] with ObjectIdPk[Action] {
   object author_created extends StringField(this, 200)
   object author_updated extends StringField(this, 200)
   
-  def getAction(ctype: String, uid: String, gc: String) = Action.find(("c_type" -> ctype)~("uid" -> uid)~("gcid" -> gc))
+  def createAction(c: String, u: String, g: String) = Action.createRecord.c_type(c).uid(u).gcid(g).save
+  
+  def getAction(c: String, u: String, g: String) = Action.where(_.c_type eqs c).and(_.uid eqs u).and(_.gcid eqs g).fetch()
+  
+  def removeAction(c: String, u: String, g: String) = Action.where(_.c_type eqs c).and(_.uid eqs u).and(_.gcid eqs g).findAndDeleteOne()
   
 }

@@ -11,33 +11,72 @@ import JE._
 import scala.xml.{NodeSeq, Text}
 import java.util.{Calendar, Date}
 import code.lib._
+import org.bson.types.ObjectId
+import com.foursquare.rogue.Rogue._
+import java.text.SimpleDateFormat
 
-import code.model.{Achievement}
+import code.model.{Achievement, Taxonomy}
 
-object CreateForm {
+object GcForm {
   
   def render = {
     
     var valid = true
     
+    var hasId = false
+    var id = ""
     var fieldName = ""
     var fieldDescription = ""
     var fieldTags = ""
     var fieldPhoto = ""
-    var fieldSetting = "1"
-    var fieldMethod = "1"
+    var fieldSetting = ""
+    var fieldMethod = ""
     var fieldDeadline = ""
     var fieldLocation = ""
-    var fieldCategory = "1"
+    var fieldCategory = ""
     var fieldAllowComments = false
     var fieldApprovedCommentsOnly = false
     var fieldUsersVote = false
     var fieldViewRatings = false
     var fieldPrivate = false
     
-    val settings = List("1" -> "Setting 1", "2" -> "Setting 2")
-    val categories = List("1" -> "Category 1", "2" -> "Category 2")
-    val methods = List("1" -> "Method 1", "2" -> "Method 2")
+    val settings = Taxonomy.getSettings
+    val categories = Taxonomy.getCategories
+    val methods = Taxonomy.getMethods
+    
+    val dateFormat = new SimpleDateFormat("MM/dd/yyyy")
+    
+    S.param("id") match {
+      case Full(x) => {
+        loadData(x)
+        hasId = true
+        id = x
+      }
+      case _ => println("no pass")
+    }
+    
+    def loadData(c: String) = {
+      val data = Achievement.where(_.id eqs new ObjectId(c)).fetch()
+      data match {
+        case List(x) => {
+          fieldName = x.title.toString
+          fieldDescription = x.description.toString
+          fieldTags = x.tags.toString
+          fieldPhoto = x.image.toString
+          fieldSetting = x.setting.toString
+          fieldMethod = x.method.toString
+          fieldDeadline = x.deadline.valueBox.map(s => dateFormat.format(s.getTime)) openOr ""
+          fieldLocation = x.location.toString
+          fieldCategory = x.category.toString
+          fieldAllowComments = x.allow_comments.value
+          fieldApprovedCommentsOnly = x.only_approved_comments.value
+          fieldUsersVote = x.can_vote.value
+          fieldViewRatings = x.can_view_ratings.value
+          fieldPrivate = x.is_private.value
+        }
+        case _ => println("no data")
+      }
+    }
 
     def process(): JsCmd = {
       
@@ -54,13 +93,34 @@ object CreateForm {
       valMax(fieldName, 128, "Name")
       valMax(fieldDescription, 500, "Description")
       valMax(fieldPhoto, 500, "Photo")
-      valIsIn(fieldSetting, settings, "Settings")
-      valIsIn(fieldCategory, categories, "Categories")
-      valIsIn(fieldMethod, methods, "Methods")
       
       if (valid) {
-        val date = Calendar.getInstance()
-        val record = Achievement.createRecord
+        
+        var valDeadline = Calendar.getInstance()
+        valDeadline.setTime(dateFormat.parse(fieldDeadline))
+        
+        if (hasId) {
+          Achievement.where(_.id eqs new ObjectId(id))
+              .modify(_.title setTo fieldName)
+              .and(_.description setTo fieldDescription)
+              .and(_.tags setTo fieldTags)
+              .and(_.image setTo fieldPhoto)
+              .and(_.setting setTo fieldSetting)
+              .and(_.method setTo fieldMethod)
+              .and(_.location setTo fieldLocation)
+              .and(_.category setTo fieldCategory)
+              .and(_.deadline setTo valDeadline)
+              .and(_.allow_comments setTo fieldAllowComments)
+              .and(_.only_approved_comments setTo fieldApprovedCommentsOnly)
+              .and(_.can_vote setTo fieldUsersVote)
+              .and(_.can_view_ratings setTo fieldViewRatings)
+              .and(_.is_private setTo fieldPrivate)
+              .and(_.author_updated setTo "Author Updated")
+              .updateOne
+        }
+        
+        else {
+          val record = Achievement.createRecord
             .title(fieldName)
             .description(fieldDescription)
             .tags(fieldTags)
@@ -69,18 +129,19 @@ object CreateForm {
             .method(fieldMethod)
             .location(fieldLocation)
             .category(fieldCategory)
-            .deadline(date:java.util.Calendar)
+            .deadline(valDeadline)
             .allow_comments(fieldAllowComments)
             .only_approved_comments(fieldApprovedCommentsOnly)
             .can_vote(fieldUsersVote)
             .can_view_ratings(fieldViewRatings)
             .is_private(fieldPrivate)
-            .created(date:java.util.Calendar)
-            .updated(date:java.util.Calendar)
             .author_created("AuthorCreated")
             .author_updated("AuthorUpdated")
             .save
-        RedirectTo("/gc?"+record.id)
+          id = record.id.is.toString
+        }
+        
+        RedirectTo("/gc?id="+id)
       }
       
       else {
@@ -109,18 +170,6 @@ object CreateForm {
     def valMax(v: String, i: Int, m: String): Boolean = {
       if (v.length > i) {
         S.error(m+": field can be no longer than "+i+" characters")
-        valid = false
-      }
-      valid
-    }
-    
-    def valIsIn(v: String, l: List[net.liftweb.util.Helpers.TheStrBindParam], m: String): Boolean = {
-      var found = false
-      l.foreach( c => {
-        if (c._1 == v) found = true
-      })
-      if (!found) {
-        S.error(m+": invalid value")
         valid = false
       }
       valid
@@ -234,6 +283,7 @@ object CreateForm {
         }))
     }
     
+    ".view-link" #> <a href={"/gc?id=" + id}>view</a> &
     ".field-name" #> doName _ &
     ".field-description" #> doDescription _ &
     ".field-tags" #> doTags _ &

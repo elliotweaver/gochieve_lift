@@ -39,10 +39,15 @@ class Boot extends Loggable {
       Menu.i("Facebook Success") / "auth" / "success" >> Hidden,
       Menu.i("Facebook Failure") / "auth" / "failure" >> Hidden,
       Menu.i("Create") / "create",
+      Menu.i("Edit") / "edit",
       Menu.i("View") / "gc",
       Menu.i("Share") / "share",
       Menu.i("Profile") / "profile",
-      Menu.i("Account") / "account"
+      Menu.i("Account") / "account",
+      Menu.i("Taxonomy: Index") / "admin" / "taxonomy",
+      Menu.i("Taxonomy: Form") / "admin" / "taxonomy" / "form",
+      Menu.i("Taxonomy: View") / "admin" / "taxonomy" / "view",
+      Menu.i("Taxonomy: Delete") / "admin" / "taxonomy" / "delete"
       //Menu.i("Share GoChieve") / "share"
     ) ::: Omniauth.sitemap ::: User.sitemap ::: Achievement.menus ::: File.menus ::: FieldOption.menus
 
