@@ -32,6 +32,29 @@ class Boot extends Loggable {
     
     // where to search snippet
     LiftRules.addToPackages("code")
+    
+    LiftRules.statelessRewrite.append {
+      /* Taxonomy CRUD */
+      case RewriteRequest(
+             ParsePath(List("admin","taxonomy","form",id),_,_,_),_,_) =>
+             RewriteResponse("admin" :: "taxonomy" :: "form" :: Nil, Map("id" -> id))
+      case RewriteRequest(
+             ParsePath(List("admin","taxonomy","view",id),_,_,_),_,_) =>
+             RewriteResponse("admin" :: "taxonomy" :: "view" :: Nil, Map("id" -> id))
+      case RewriteRequest(
+             ParsePath(List("admin","taxonomy","delete",id),_,_,_),_,_) =>
+             RewriteResponse("admin" :: "taxonomy" :: "delete" :: Nil, Map("id" -> id))
+      /* Action CRUD */
+      case RewriteRequest(
+             ParsePath(List("admin","action","form",id),_,_,_),_,_) =>
+             RewriteResponse("admin" :: "action" :: "form" :: Nil, Map("id" -> id))
+      case RewriteRequest(
+             ParsePath(List("admin","action","view",id),_,_,_),_,_) =>
+             RewriteResponse("admin" :: "action" :: "view" :: Nil, Map("id" -> id))
+      case RewriteRequest(
+             ParsePath(List("admin","action","delete",id),_,_,_),_,_) =>
+             RewriteResponse("admin" :: "action" :: "delete" :: Nil, Map("id" -> id))
+    }
 
     // Build SiteMap
     val entries = List(
@@ -47,9 +70,13 @@ class Boot extends Loggable {
       Menu.i("Taxonomy: Index") / "admin" / "taxonomy",
       Menu.i("Taxonomy: Form") / "admin" / "taxonomy" / "form",
       Menu.i("Taxonomy: View") / "admin" / "taxonomy" / "view",
-      Menu.i("Taxonomy: Delete") / "admin" / "taxonomy" / "delete"
+      Menu.i("Taxonomy: Delete") / "admin" / "taxonomy" / "delete",
+      Menu.i("Action: Index") / "admin" / "action",
+      Menu.i("Action: Form") / "admin" / "action" / "form",
+      Menu.i("Action: View") / "admin" / "action" / "view",
+      Menu.i("Action: Delete") / "admin" / "action" / "delete"
       //Menu.i("Share GoChieve") / "share"
-    ) ::: Omniauth.sitemap ::: User.sitemap ::: Achievement.menus ::: File.menus ::: FieldOption.menus
+    ) ::: Omniauth.sitemap ::: User.sitemap
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.

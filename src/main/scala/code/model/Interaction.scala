@@ -14,30 +14,34 @@ import org.bson.types.ObjectId
 import java.util.{Calendar, Date}
 import java.text.SimpleDateFormat
 
-class Action extends MongoRecord[Action] with ObjectIdPk[Action] {
-  def meta = Action
+class Interaction extends MongoRecord[Interaction] with ObjectIdPk[Interaction] {
+  def meta = Interaction
   
   object c_type extends StringField(this, 200)
   object uid extends StringField(this, 200)
   object gcid extends StringField(this, 200)
+  object subject extends StringField(this, 200)
+  object message extends TextareaField(this, 200)
+  object link extends StringField(this, 200)
+  object video extends StringField(this, 200)
+  object image extends StringField(this, 200)
   object created extends DateTimeField(this)
   object updated extends DateTimeField(this)
   object author_created extends StringField(this, 200)
   object author_updated extends StringField(this, 200)
   
-  def createAction(c: String, u: String, g: String) = Action.createRecord.c_type(c).uid(u).gcid(g).save
-  
-  def getAction(c: String, u: String, g: String) = Action.where(_.c_type eqs c).and(_.uid eqs u).and(_.gcid eqs g).fetch()
-  
-  def removeAction(c: String, u: String, g: String) = Action.where(_.c_type eqs c).and(_.uid eqs u).and(_.gcid eqs g).findAndDeleteOne()
-  
 }
 
-object Action extends Action with MongoMetaRecord[Action] {
+object Interaction extends Interaction with MongoMetaRecord[Interaction] {
   override def fieldOrder = List(
       c_type,
       uid,
       gcid,
+      subject,
+      message,
+      link,
+      video,
+      image,
       created,
       updated,
       author_created,

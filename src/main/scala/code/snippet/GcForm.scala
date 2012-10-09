@@ -85,7 +85,7 @@ object GcForm {
       valRequired(fieldName, "Name")
       valRequired(fieldDescription, "Description")
       valRequired(fieldTags, "Tags")
-      //!valRequired(fieldPhoto) ||
+      //valRequired(fieldPhoto, "Photo")
       valRequired(fieldSetting, "Setting")
       valRequired(fieldMethod, "Method")
       valRequired(fieldCategory, "Category")
@@ -98,6 +98,9 @@ object GcForm {
         
         var valDeadline = Calendar.getInstance()
         valDeadline.setTime(dateFormat.parse(fieldDeadline))
+        Taxonomy.createTags(fieldTags)
+        
+        val date = Calendar.getInstance()
         
         if (hasId) {
           Achievement.where(_.id eqs new ObjectId(id))
@@ -115,6 +118,7 @@ object GcForm {
               .and(_.can_vote setTo fieldUsersVote)
               .and(_.can_view_ratings setTo fieldViewRatings)
               .and(_.is_private setTo fieldPrivate)
+              .and(_.updated setTo date)
               .and(_.author_updated setTo "Author Updated")
               .updateOne
         }
@@ -215,14 +219,6 @@ object GcForm {
         }))
     }
     
-    def doDeadline(msg: NodeSeq) = {
-      fieldWrap("deadline", "Deadline",
-        SHtml.ajaxText(fieldDeadline, v => {
-          println("deadline:" + v)
-          fieldDeadline = v 
-        }, "maxlength" -> "128", "placeholder" -> "Deadline"))
-    }
-    
     def doPhoto(msg: NodeSeq) = {
       fieldWrap("photo", "Photo", <input type="filepicker-dragdrop"></input>)
     }
@@ -284,13 +280,16 @@ object GcForm {
     }
     
     ".view-link" #> <a href={"/gc?id=" + id}>view</a> &
+    ".cancel-link" #> <a href={"/gc?id=" + id}>cancel</a> &
     ".field-name" #> doName _ &
     ".field-description" #> doDescription _ &
     ".field-tags" #> doTags _ &
-    ".field-photo" #> doPhoto _ &
+    ".filepicker-dragdrop [value]" #> fieldPhoto &
+    ".photo-value [onchange]" #> SHtml.onEvent(s => fieldPhoto = s) &
     ".field-setting" #> doSetting _ &
     ".field-method" #> doMethod _ &
-    ".field-deadline" #> doDeadline _ &
+    ".input-deadline [value]" #> fieldDeadline &
+    ".input-deadline [onchange]" #> SHtml.onEvent(s => fieldDeadline = s) &
     ".field-location" #> doLocation _ &
     ".field-allow-comments" #> doAllowComments _ &
     ".field-approved-comments-only" #> doApprovedOnly _ &

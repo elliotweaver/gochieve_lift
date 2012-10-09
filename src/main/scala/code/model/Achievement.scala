@@ -9,23 +9,18 @@ import net.liftweb.common._
 import net.liftweb.sitemap._
 import net.liftweb.json._
 import com.restfb._
-import code.lib.{MongoCRUDify}
-import bootstrap.liftweb.MenuGroups
 import xml.{ Text, NodeSeq }
-import net.liftweb.widgets.autocomplete.AutoComplete
+import com.foursquare.rogue.Rogue._
+import org.bson.types.ObjectId
+import java.util.{Calendar, Date}
+import java.text.SimpleDateFormat
+
+import code.model._
 
 /**
 * The singleton that has methods for accessing the database
 */
-object Achievement extends Achievement with MongoMetaRecord[Achievement] with MongoCRUDify[Achievement] {
-    
-  override def pageWrapper(body: NodeSeq) =
-      <lift:surround with="_layout_single" at="content">
-        <div class="lift:Msgs?showAll=true"></div>
-        {body}
-      </lift:surround>
-  
-  override def addlMenuLocParams = List(MenuGroups.TopBarGroup)
+object Achievement extends Achievement with MongoMetaRecord[Achievement] {
   
   override def fieldOrder = List(
       title,
@@ -112,52 +107,26 @@ class Achievement private() extends MongoRecord[Achievement] with ObjectIdPk[Ach
   object author_created extends StringField(this, 200)
   object author_updated extends StringField(this, 200)
   
+  val dateFormat = new SimpleDateFormat("MM/dd/yyyy")
+  
   def getSetting = {
-    setting.value match {
-      case "1" => "Public"
-      case "2" => "Invite Only"
-      case "3" => "Limited #"
-      case _ => "There is no value which is odd"
+    Taxonomy.where(_.id eqs new ObjectId(setting.value)).fetch match {
+      case List(x) => x.name.toString
+      case _ => "No setting selected"
     }
   }
   
   def getMethod = {
-    method.value match {
-      case "1" => "Honor System"
-      case "2" => "Photo Submission"
-      case "3" => "Video Submission"
-      case "4" => "Check-In"
-      case "5" => "Creator Approval"
-      case _ => "There is no value which is odd"
+    Taxonomy.where(_.id eqs new ObjectId(method.value)).fetch match {
+      case List(x) => x.name.toString
+      case _ => "No method selected"
     }
   }
   
-  def getCategory = {
-    category.value match {
-      case "1" => "Auto's and Vehicles"
-      case "2" => "Comedy"
-      case "3" => "Education"
-      case "4" => "Entertainment"
-      case "5" => "Fashion"
-      case _ => "There is no value which is odd"
-    }
-  }
+  def getCategory = Taxonomy.viewCategory(category.toString)
   
-  /*
-  object SettingTypes extends Enumeration {
-    val Option1         = new Val("Option 1")
-    val Option2         = new Val("Option 2")
-  }
+  def getTags = Taxonomy.viewTags(tags.toString)
   
-  object MethodTypes extends Enumeration {
-    val Option1         = new Val("Option 1")
-    val Option2         = new Val("Option 2")
-  }
-  
-  object CategoryTypes extends Enumeration {
-    val Option1         = new Val("Option 1")
-    val Option2         = new Val("Option 2")
-  }
-  */
+  def getDeadline = deadline.valueBox.map(s => dateFormat.format(s.getTime)) openOr ""
   
 }

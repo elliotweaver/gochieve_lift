@@ -25,14 +25,29 @@
             <div class="field-name"></div>
             <div class="field-description"></div>
             <div class="field-tags"></div>
-            <div class="field-photo"></div>
             
+            <div class="field field-photo">
+				      <label>Photo: </label>
+				      <div class="item">
+				          <input type="filepicker-dragdrop" onchange="if (this.value) {
+							        $('.photo-value').val(this.value).change();
+							    }"></input>
+              </div>
+				    </div>
+				    <input class="photo-value" type="hidden" value=""></input>
           
             <div class="field-setting"></div>
             <div class="field-method"></div>
             <div class="field-location"></div>
             <div class="field-category"></div>
-            <div class="field-deadline"></div>
+            
+            <div class="field field-deadline">
+				      <label>Deadline: </label>
+				      <div class="item">
+				        <input type="text" placeholder="Deadline" maxlength="128" class="input-deadline">
+				      </div>
+				    </div>
+
             <div class="field-allow-comments"></div>
             <div class="field-approved-comments-only"></div>
             <div class="field-users-vote"></div>
@@ -40,6 +55,7 @@
             <div class="field-private"></div>
             
             <input type="submit" value="Submit">
+            <div class="cancel-link"></div>
         
         </div>
       </form>

@@ -190,7 +190,7 @@ class GcView {
   
   def viewSettings = 
     <div class="settings">
-      {data.getSetting} : {data.getMethod} : no time limit
+      {data.getSetting} : {data.getMethod} : {data.getDeadline}
     </div>
   
   def viewRelated = 
@@ -207,7 +207,7 @@ class GcView {
   
   def viewPhoto = 
     <div class="photo">
-      <img src="http://www.google.com/images/srpr/logo3w.png"></img>
+      <img src={data.image.toString}></img>
     </div>
   
   def viewDescription = 
@@ -225,7 +225,7 @@ class GcView {
   def viewTags = 
     <div class="item tags">
       <h3>Tags</h3> 
-      <span class="about">{data.tags}</span>
+      <span class="about">{data.getTags}</span>
     </div>
     
   def viewLocation = 
@@ -253,10 +253,7 @@ class GcView {
     </div>
     
   def viewInteract = {
-    <div class="interact">
-      <h2>Interaction Area</h2>
-      <div>The interaction widget goes here. Things like add comments, image, link, etc.</div>
-    </div>
+    
   }
   
   def viewActivity = {

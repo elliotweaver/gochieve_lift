@@ -13,31 +13,30 @@ import java.util.{Calendar, Date}
 import code.lib._
 import com.foursquare.rogue.Rogue._
 import org.bson.types.ObjectId
+import java.text.SimpleDateFormat
 
-import code.model.{Taxonomy}
+import code.model.{Action}
 
-object AdminTaxonomy {
+object AdminAction {
   
   def render = {
-    
-    val all = Taxonomy.fetch()
-    
+    val all = Action.fetch()
     ".results *" #> all.map( x => {
         ".type *" #> x.c_type &
-        ".name *" #> x.name &
-        ".machine *" #> x.machine &
+        ".uid *" #> x.uid &
+        ".gcid *" #> x.gcid &
         ".options *" #> <span>
-             <a href={"taxonomy/view?id=" + x.id.is.toString}>view</a> | 
-             <a href={"taxonomy/form?id=" + x.id.is.toString}>edit</a> | 
-             <a href={"taxonomy/delete?id=" + x.id.is.toString}>delete</a> 
+             <a href={"action/view?id=" + x.id.is.toString}>view</a> | 
+             <a href={"action/form?id=" + x.id.is.toString}>edit</a> | 
+             <a href={"action/delete?id=" + x.id.is.toString}>delete</a> 
            </span>
       })
-    
   }
-  
 }
 
-object AdminTaxonomyDelete {
+
+
+object AdminActionDelete {
   
   def render = {
     
@@ -53,8 +52,8 @@ object AdminTaxonomyDelete {
     }
     
     def process(): JsCmd = {
-      Taxonomy.where(_.id eqs new ObjectId(id)).findAndDeleteOne()
-      RedirectTo("/admin/taxonomy")
+      Action.where(_.id eqs new ObjectId(id)).findAndDeleteOne()
+      RedirectTo("/admin/action")
     }
     
     ".process" #> SHtml.hidden(process) 
@@ -63,18 +62,19 @@ object AdminTaxonomyDelete {
   
 }
 
-object AdminTaxonomyView {
+object AdminActionView {
   
   def render = {
     
     var hasId = false
     var id = ""
     var fieldCtype = ""
-    var fieldName = ""
-    var fieldMachine = ""
-    var fieldWeight = ""
+    var fieldUid = ""
+    var fieldGcid = ""
     var fieldCreated = ""
     var fieldUpdated = ""
+      
+    val dateFormat = new SimpleDateFormat("MM/dd/yyyy")
     
     S.param("id") match {
       case Full(x) => {
@@ -86,13 +86,12 @@ object AdminTaxonomyView {
     }
     
     def loadData(c: String) = {
-      val data = Taxonomy.where(_.id eqs new ObjectId(c)).fetch()
+      val data = Action.where(_.id eqs new ObjectId(c)).fetch()
       data match {
         case List(x) => {
           fieldCtype = x.c_type.toString
-          fieldName = x.name.toString
-          fieldMachine = x.machine.toString
-          fieldWeight = x.weight.toString
+          fieldUid = x.uid.toString
+          fieldGcid = x.gcid.toString
           fieldCreated = x.created.valueBox.map(s => s.getTime.toString) openOr ""
           fieldUpdated = x.updated.valueBox.map(s => s.getTime.toString) openOr ""
         }
@@ -102,9 +101,8 @@ object AdminTaxonomyView {
     
     ".t-id" #> id &
     ".t-ctype" #> fieldCtype &
-    ".t-name" #> fieldName &
-    ".t-machine" #> fieldMachine &
-    ".t-weight" #> fieldWeight &
+    ".t-uid" #> fieldUid &
+    ".t-gcid" #> fieldGcid &
     ".t-created" #> fieldCreated &
     ".t-updated" #> fieldUpdated
     
@@ -112,7 +110,7 @@ object AdminTaxonomyView {
   
 }
 
-object AdminTaxonomyForm {
+object AdminActionForm {
   
   def render = {
     
@@ -121,13 +119,8 @@ object AdminTaxonomyForm {
     var hasId = false
     var id = ""
     var fieldCtype = ""
-    var fieldName = ""
-    var fieldMachine = ""
-    var fieldWeight = ""
-    var fieldCreated = ""
-    var fieldUpdated = ""
-    var fieldAuthorCreated = ""
-    var fieldAuthorUpdated = ""
+    var fieldUid = ""
+    var fieldGcid = ""
       
     S.param("id") match {
       case Full(x) => {
@@ -139,13 +132,12 @@ object AdminTaxonomyForm {
     }
     
     def loadData(c: String) = {
-      val data = Taxonomy.where(_.id eqs new ObjectId(c)).fetch()
+      val data = Action.where(_.id eqs new ObjectId(c)).fetch()
       data match {
         case List(x) => {
           fieldCtype = x.c_type.toString
-          fieldName = x.name.toString
-          fieldMachine = x.machine.toString
-          fieldWeight = x.weight.toString
+          fieldUid = x.uid.toString
+          fieldGcid = x.gcid.toString
         }
         case _ => println("no data")
       }
@@ -155,37 +147,34 @@ object AdminTaxonomyForm {
       Thread.sleep(400) 
       
       valRequired(fieldCtype, "Type")
-      valRequired(fieldName, "Name")
-      valRequired(fieldMachine, "Machine")
-      valMin(fieldName, 3, "Name")
+      valRequired(fieldUid, "Uid")
+      valRequired(fieldGcid, "Gcid")
       valMax(fieldCtype, 128, "Type")
-      valMax(fieldName, 128, "Name")
-      valMax(fieldMachine, 128, "Machine")
+      valMax(fieldUid, 128, "Uid")
+      valMax(fieldGcid, 128, "Gcid")
       
       if (valid) {
         val date = Calendar.getInstance()
         println("valid")
         hasId match {
           case true => {
-            Taxonomy.where(_.id eqs new ObjectId(id))
+            Action.where(_.id eqs new ObjectId(id))
                 .modify(_.c_type setTo fieldCtype)
-                .and(_.name setTo fieldName)
-                .and(_.machine setTo fieldMachine)
-                .and(_.weight setTo fieldWeight.toInt)
+                .and(_.uid setTo fieldUid)
+                .and(_.gcid setTo fieldGcid)
                 .and(_.updated setTo date)
                 .updateOne()
           }
           case false => {
-            val q = Taxonomy.createRecord
-                .name(fieldName)
+            val q = Action.createRecord
+                .uid(fieldUid)
                 .c_type(fieldCtype)
-                .machine(fieldMachine)
-                .weight(fieldWeight.toInt)
+                .gcid(fieldGcid)
                 .save
             id = q.id.is.toString
           }
         }
-        RedirectTo("/admin/taxonomy")
+        RedirectTo("/admin/action")
       }
       
       else {
@@ -229,28 +218,20 @@ object AdminTaxonomyForm {
         }, "maxlength" -> "128", "placeholder" -> "Type"))
     }
     
-    def doName(msg: NodeSeq) = {
-      fieldWrap("name", "Name",
-        SHtml.ajaxText(fieldName, v => {
-          println("name:" + v)
-          fieldName = v 
-        }, "maxlength" -> "128", "placeholder" -> "Name"))
+    def doUid(msg: NodeSeq) = {
+      fieldWrap("uid", "Uid",
+        SHtml.ajaxText(fieldUid, v => {
+          println("uid:" + v)
+          fieldUid = v 
+        }, "maxlength" -> "128", "placeholder" -> "Uid"))
     }
     
-    def doMachine(msg: NodeSeq) = {
-      fieldWrap("machine", "Machine",
-        SHtml.ajaxText(fieldMachine, v => {
-          println("machine:" + v)
-          fieldMachine = v 
-        }, "maxlength" -> "128", "placeholder" -> "Machine") ++ SHtml.hidden(process) )
-    }
-    
-    def doWeight(msg: NodeSeq) = {
-      fieldWrap("weight", "Weight",
-        SHtml.ajaxText(fieldWeight, v => {
-          println("weight:" + v)
-          fieldWeight = v 
-        }, "maxlength" -> "128", "placeholder" -> "Weight"))
+    def doGcid(msg: NodeSeq) = {
+      fieldWrap("gcid", "Gcid",
+        SHtml.ajaxText(fieldGcid, v => {
+          println("gcid:" + v)
+          fieldGcid = v 
+        }, "maxlength" -> "128", "placeholder" -> "Gcid") ++ SHtml.hidden(process) )
     }
     
     def doId(msg: NodeSeq) = {
@@ -260,9 +241,8 @@ object AdminTaxonomyForm {
     
     ".field-id" #> doId _ &
     ".field-c-type" #> doCtype _ &
-    ".field-name" #> doName _ &
-    ".field-weight" #> doWeight _ &
-    ".field-machine" #> doMachine _
+    ".field-uid" #> doUid _ &
+    ".field-gcid" #> doGcid _
     
   }
   
